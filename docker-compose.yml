@@ -1,0 +1,16 @@
+services:
+  db:
+    container_name: "greenlight-db"
+    image: postgres:18.1-bookworm
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=greenlight
+      - POSTGRES_PASSWORD=pa55word
+      - POSTGRES_DB=greenlight
+    volumes:
+      - greenlight-db-data:/var/lib/postgresql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  greenlight-db-data:
