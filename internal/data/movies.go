@@ -25,7 +25,7 @@ func ValidateMovie(v *validator.Validator, movie *Movie) {
 	v.Check(len(movie.Title) <= 500, "title", "must not be more than 500 bytes long")
 
 	v.Check(movie.Year != 0, "year", "must be provided")
-	v.Check(movie.Year >= 1888, "year", "must be greater than 1888")
+	v.Check(movie.Year >= 1888, "year", "must be greater than or equal to 1888")
 	v.Check(movie.Year <= int32(time.Now().Year()), "year", "must not be in the future")
 
 	v.Check(movie.Runtime != 0, "runtime", "must be provided")
@@ -96,7 +96,7 @@ func (m MovieModel) Update(movie *Movie) error {
 	query := `
 	UPDATE movies
 	SET title = $1, year = $2, runtime = $3, genres = $4, version = version + 1
-	WHERE id = $5 AND version $6
+	WHERE id = $5 AND version = $6
 	RETURNING version`
 
 	args := []any{movie.Title, movie.Year, movie.Runtime, pq.Array(movie.Genres), movie.ID, movie.Version}
